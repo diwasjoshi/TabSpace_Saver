@@ -1,0 +1,35 @@
+{
+
+  "manifest_version": 2,
+  "name": "TabSpace Saver",
+  "version": "1.0",
+
+  "description": "Save collections of tabs into specific tabspaces.",
+  "homepage_url": "https://github.com/diwasjoshi/TabSpace_Saver",
+  "icons": {
+    "24": "icons/main_icon.svg",
+    "48": "icons/main_icon.svg",
+    "96": "icons/main_icon.svg"
+  },
+
+  "permissions": [
+    "activeTab"
+  ],
+
+  "browser_action": {
+    "default_icon": {
+      "24": "icons/main_icon.svg",
+      "48": "icons/main_icon.svg",
+      "96": "icons/main_icon.svg"
+    },
+    "default_title": "TabSpace Saver",
+    "default_popup": "popup/tabSaver.html"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*/"],
+      "js": ["tabSaver.js"]
+    }
+  ]
+}
