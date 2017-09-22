@@ -13,7 +13,8 @@
   },
 
   "permissions": [
-    "activeTab"
+    "host",
+    "tabs"
   ],
 
   "browser_action": {
@@ -29,7 +30,7 @@
   "content_scripts": [
     {
       "matches": ["*://*/"],
-      "js": ["tabSaver.js"]
+      "js": ["content_scripts/tabSaver.js"]
     }
   ]
 }
