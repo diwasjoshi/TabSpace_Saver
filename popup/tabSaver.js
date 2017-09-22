@@ -1,13 +1,21 @@
 var addWinButton = document.getElementById('addCurrentWindow');
+var storage = browser.storage.local;
+var storageData;
+
+storage.get("tabSaverData").then(function(data){
+    storageData = (data === undefined || data === null) ? {} : data;
+});
 
 addWinButton.addEventListener("click", (e) => {
     browser.tabs.query({
         currentWindow: true
     }).then(function(tabs){
+        console.log(storageData.tabSaverData.storedWindows);return;
+        saveTabsToStorage(tabs);
+
         var listTemplate = document.getElementById('template').cloneNode(true);
         listTemplate.getElementsByClassName('heading')[0].innerHTML = 'New Window';
         listTemplate.id = 'Window';
-
         var tabList = listTemplate.children[1];
         for (var i=0; i<tabs.length; i++){
             var tabDetail = tabList.children[0].cloneNode(true);
@@ -20,7 +28,20 @@ addWinButton.addEventListener("click", (e) => {
     })
 });
 
+function saveTabsToStorage(tabs){
+    var currentData = {'tabs':[]},
+    storedWins = storageData.storedWindows !== undefined ? storageData.storedWindows : {};
 
+    tabs.forEach((x, index) => currentData.tabs.push({
+        'title': x.title,
+        'url': x.url
+    }));
+    currentData.windowID = browser.windows.WINDOW_ID_CURRENT;
+    storedWins["window" + (Object.keys(storedWins).length + 1)] = currentData;
+    storageData.storedWindows = storedWins;
+
+    storage.set({'tabSaverData': storageData});
+}
 function createNode(elName){
     var node = document.createElement(elName);
     return node;

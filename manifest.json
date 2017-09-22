@@ -14,7 +14,8 @@
 
   "permissions": [
     "host",
-    "tabs"
+    "tabs",
+    "storage"
   ],
 
   "browser_action": {
