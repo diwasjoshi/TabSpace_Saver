@@ -1,7 +1,37 @@
-html, body {
-  max-width: 200px;
-  max-height: 500px;
-  overflow: auto;
+body {
+    width: 200px;
+    max-height: 500px;
+    overflow: hidden;
+    background-color: #E3E3E3;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #c9c9c9;
+}
+
+.main-header{
+    position: fixed;
+    top: 0;
+    height: 50px;
+    z-index: 1;
+    background-color: #89BDD3;
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+    text-align: center;
+    box-sizing: border-box;
+}
+#addCurrentWindow{
+
+
+}
+#mainList{
+    margin-top: 50px;
+    max-height: 450px;
+    overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+    display: none;
 }
 
 #template{
