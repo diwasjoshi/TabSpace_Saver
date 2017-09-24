@@ -14,18 +14,18 @@ function init(){
 
 function addTabList(tabs){
 
-    var listTemplate = document.getElementById('template').cloneNode(true);
-    listTemplate.getElementsByClassName('heading')[0].innerHTML = 'New Window';
-    listTemplate.id = 'Window';
-    var tabList = listTemplate.children[1];
+    var listTemplate = $('#template').clone();
+    $(listTemplate).children('.heading').first().html('New Window');
+    $(listTemplate).attr('id', 'Window');
+    var tabList = $(listTemplate).children('.tabList').first();
     for (var i=0; i<tabs.length; i++){
-        var tabDetail = tabList.children[0].cloneNode(true);
-        tabDetail.innerHTML = stringTruncate(tabs[i].title,15);
-        tabDetail.setAttribute('title', tabs[i].title);
-        tabDetail.setAttribute('url', tabs[i].url);
-        tabList.appendChild(tabDetail);
+        var tabDetail = $(tabList).children('.tabDetail').first().clone();
+        $(tabDetail).html(stringTruncate(tabs[i].title,15));
+        $(tabDetail).attr('title', tabs[i].title);
+        $(tabDetail).attr('url', tabs[i].url);
+        $(tabList).append(tabDetail);
     }
-    document.getElementById('mainList').appendChild(listTemplate);
+    $('#mainList').append(listTemplate);
 
 }
 
@@ -53,11 +53,6 @@ function saveTabsToStorage(tabs){
 
     storage.set({'tabSaverData': storageData});
     console.log(storageData.storedWindows);
-}
-
-function createNode(elName){
-    var node = document.createElement(elName);
-    return node;
 }
 
 function stringTruncate(str, limit=5){
