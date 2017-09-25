@@ -30,6 +30,7 @@ body {
 #addCurrentWindow:hover{
     color: #D5D5D5;
 }
+
 #mainList{
     margin-top: 48px;
     max-height: 450px;
@@ -54,9 +55,6 @@ body {
     margin-left: 20px;
     margin-right: 20px;
     padding-left: 8px;
-}
-#mainList .winList .heading:hover{
-
 }
 #mainList .winList .tabList{
     max-height: 250px;

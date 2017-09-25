@@ -7,15 +7,17 @@ function init(){
         storageData = (data.tabSaverData === undefined || data.tabSaverData === null) ? {} : data.tabSaverData;
 
         var storedWindows = storageData.storedWindows;
-        for(var key in storedWindows)
+        for(var key in storedWindows){
             addTabList(storedWindows[key].tabs);
+            if(browser.windows.WINDOW_ID_CURRENT === storedWindows[key].windowID)
+                $(addWinButton).hide();
+        }
     });
 }
 
 function addTabList(tabs){
-
     var listTemplate = $('#template').clone();
-    $(listTemplate).children('.heading').first().html('New Window');
+    $(listTemplate).children('.heading').first().html('Window ' + ($('#mainList').children('.winList').length+1));
     $(listTemplate).attr('id', 'Window');
     var tabList = $(listTemplate).children('.tabList').first();
     for (var i=0; i<tabs.length; i++){
