@@ -20,11 +20,12 @@ function addTabList(tabs){
     var tabList = $(listTemplate).children('.tabList').first();
     for (var i=0; i<tabs.length; i++){
         var tabDetail = $(tabList).children('.tabDetail').first().clone();
-        $(tabDetail).html(stringTruncate(tabs[i].title,15));
+        $(tabDetail).html(stringTruncate(tabs[i].title,20));
         $(tabDetail).attr('title', tabs[i].title);
         $(tabDetail).attr('url', tabs[i].url);
         $(tabList).append(tabDetail);
     }
+    $(tabList).children('.tabDetail').first().remove();
     $('#mainList').append(listTemplate);
 
 }
@@ -33,7 +34,6 @@ addWinButton.addEventListener("click", (e) => {
     browser.tabs.query({
         currentWindow: true
     }).then(function(tabs){
-        //console.log(storageData.tabSaverData.storedWindows);return;
         saveTabsToStorage(tabs);
         addTabList(tabs);
     })

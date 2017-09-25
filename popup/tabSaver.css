@@ -2,7 +2,7 @@ body {
     width: 200px;
     max-height: 500px;
     overflow: hidden;
-    background-color: #E3E3E3;
+    background-color: #F8F9FA;
     padding: 0;
     margin: 0;
     border: 1px solid #c9c9c9;
@@ -13,23 +13,64 @@ body {
     top: 0;
     height: 50px;
     z-index: 1;
-    background-color: #89BDD3;
+    background-color: #343A40;
     width: 100%;
     margin: 0;
-    padding: 10px;
+    padding-top: 14px;
     text-align: center;
     box-sizing: border-box;
 }
 #addCurrentWindow{
-
-
+    border: 0;
+    background: none;
+    color: #FFFFFF;
+    font-size: 16px;
+    cursor: pointer;
+}
+#addCurrentWindow:hover{
+    color: #D5D5D5;
 }
 #mainList{
-    margin-top: 50px;
+    margin-top: 48px;
     max-height: 450px;
     overflow-y: auto;
 }
+#mainList .winList{
+    border: 1px solid #C9C9C9;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    margin: 12px 0 12px 0;
 
+}
+#mainList .winList:last-of-type{
+    margin-bottom: 0;
+}
+#mainList .winList .heading{
+    margin-top: -10px;
+    background-color: #F8F9FA;
+    width: auto;
+    font-size: 16px;
+    color: #333;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-left: 8px;
+}
+#mainList .winList .heading:hover{
+
+}
+#mainList .winList .tabList{
+    max-height: 250px;
+    overflow-y: scroll;
+}
+.winList .tabDetail{
+    font-size: 14px;
+    padding: 8px 5px;
+    background-color: #EEE;
+    border-bottom: 1px solid #DDD;
+}
+.winList .tabDetail:hover{
+    background-color: #C9C9C9;
+}
 ::-webkit-scrollbar {
     display: none;
 }
