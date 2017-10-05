@@ -46,7 +46,7 @@ body {
 #mainList .winList:last-of-type{
     margin-bottom: 0;
 }
-#mainList .winList .heading{
+.winList .header{
     margin-top: -10px;
     background-color: #F8F9FA;
     width: auto;
@@ -56,7 +56,13 @@ body {
     margin-right: 20px;
     padding-left: 8px;
 }
-#mainList .winList .tabList{
+.winList .header #openWindow,
+.winList .header #deleteWindow{
+    font-size: 10px;
+    color: #777;
+    cursor: pointer;
+}
+.winList .tabList{
     max-height: 250px;
     overflow-y: scroll;
 }
@@ -69,10 +75,6 @@ body {
 .winList .tabDetail:hover{
     background-color: #C9C9C9;
 }
-::-webkit-scrollbar {
-    display: none;
-}
-
 #template{
     display: none;
 }

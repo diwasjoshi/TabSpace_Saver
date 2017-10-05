@@ -1,4 +1,3 @@
-var addWinButton = document.getElementById('addCurrentWindow');
 var storage = browser.storage.local;
 var storageData;
 
@@ -10,14 +9,14 @@ function init(){
         for(var key in storedWindows){
             addTabList(storedWindows[key].tabs);
             if(browser.windows.WINDOW_ID_CURRENT === storedWindows[key].windowID)
-                $(addWinButton).hide();
+                $('#addCurrentWindow').hide();
         }
     });
 }
 
 function addTabList(tabs){
     var listTemplate = $('#template').clone();
-    $(listTemplate).children('.heading').first().html('Window ' + ($('#mainList').children('.winList').length+1));
+    $(listTemplate).find('.header #heading').first().html('Window ' + ($('#mainList').children('.winList').length+1));
     $(listTemplate).attr('id', 'Window');
     var tabList = $(listTemplate).children('.tabList').first();
     for (var i=0; i<tabs.length; i++){
@@ -31,15 +30,6 @@ function addTabList(tabs){
     $('#mainList').append(listTemplate);
 
 }
-
-addWinButton.addEventListener("click", (e) => {
-    browser.tabs.query({
-        currentWindow: true
-    }).then(function(tabs){
-        saveTabsToStorage(tabs);
-        addTabList(tabs);
-    })
-});
 
 function saveTabsToStorage(tabs){
     var currentData = {'tabs':[]},
@@ -63,6 +53,30 @@ function stringTruncate(str, limit=5){
    else
       return str;
 };
+
+
+$('#addCurrentWindow').on("click", function(){
+    browser.tabs.query({
+        currentWindow: true
+    }).then(function(tabs){
+        saveTabsToStorage(tabs);
+        addTabList(tabs);
+    })
+});
+
+$(document).on('click', '#openWindow', function(){
+    $(this).hide();
+    var tabUrls = [];
+    $(this).parents('.winList').find('.tabDetail').each((index, el) => tabUrls.push($(el).attr('url')));
+    tabUrls = tabUrls.filter(x => x.includes('http'));
+
+    browser.windows.create({
+        url : tabUrls
+    }).then(function(windowInfo){
+        console.log('new window opened.');
+    })
+})
+
 
 //storage.clear();
 init();
