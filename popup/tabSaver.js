@@ -1,20 +1,26 @@
-var storage = browser.storage.local;
-var storageData;
+var storage = browser.storage.local, curWindows = browser.windows;
+var storageData, windowsOpen;
 
 function init(){
+
+    curWindows.getAll().then(function(windowInfoArray){
+        windowsOpen = windowInfoArray.map(x => x.id);
+    });
+
     storage.get("tabSaverData").then(function(data){
         storageData = (data.tabSaverData === undefined || data.tabSaverData === null) ? {} : data.tabSaverData;
 
         var storedWindows = storageData.storedWindows;
         for(var key in storedWindows){
-            addTabList(storedWindows[key].tabs);
+            addTabList(storedWindows[key].tabs, storedWindows[key].windowID);
             if(browser.windows.WINDOW_ID_CURRENT === storedWindows[key].windowID)
                 $('#addCurrentWindow').hide();
         }
     });
 }
 
-function addTabList(tabs){
+function addTabList(tabs, windowID){
+
     var listTemplate = $('#template').clone();
     $(listTemplate).find('.header #heading').first().html('Window ' + ($('#mainList').children('.winList').length+1));
     $(listTemplate).attr('id', 'Window');
@@ -26,6 +32,11 @@ function addTabList(tabs){
         $(tabDetail).attr('url', tabs[i].url);
         $(tabList).append(tabDetail);
     }
+    console.log(windowsOpen);
+    console.log(windowID);
+    if(windowsOpen.includes(windowID))
+        $(listTemplate).find('#openWindow').remove();
+
     $(tabList).children('.tabDetail').first().remove();
     $('#mainList').append(listTemplate);
 
@@ -60,7 +71,7 @@ $('#addCurrentWindow').on("click", function(){
         currentWindow: true
     }).then(function(tabs){
         saveTabsToStorage(tabs);
-        addTabList(tabs);
+        addTabList(tabs, browser.windows.WINDOW_ID_CURRENT);
     })
 });
 
