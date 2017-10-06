@@ -1,10 +1,15 @@
-var storage = browser.storage.local, curWindows = browser.windows;
-var storageData, windowsOpen;
+var storage = browser.storage.local, windows = browser.windows;
+var storageData, windowsOpen, currentWindow;
 
 function init(){
 
-    curWindows.getAll().then(function(windowInfoArray){
+    windows.getAll().then(function(windowInfoArray){
         windowsOpen = windowInfoArray.map(x => x.id);
+
+    });
+
+    windows.getCurrent().then(function(windowInfo){
+        currentWindow = windowInfo;
     });
 
     storage.get("tabSaverData").then(function(data){
@@ -13,7 +18,7 @@ function init(){
         var storedWindows = storageData.storedWindows;
         for(var key in storedWindows){
             addTabList(storedWindows[key].tabs, storedWindows[key].windowID);
-            if(browser.windows.WINDOW_ID_CURRENT === storedWindows[key].windowID)
+            if(currentWindow.id === storedWindows[key].windowID)
                 $('#addCurrentWindow').hide();
         }
     });
@@ -23,7 +28,8 @@ function addTabList(tabs, windowID){
 
     var listTemplate = $('#template').clone();
     $(listTemplate).find('.header #heading').first().html('Window ' + ($('#mainList').children('.winList').length+1));
-    $(listTemplate).attr('id', 'Window');
+    $(listTemplate).attr('id', 'window' + ($('#mainList').children('.winList').length+1));
+
     var tabList = $(listTemplate).children('.tabList').first();
     for (var i=0; i<tabs.length; i++){
         var tabDetail = $(tabList).children('.tabDetail').first().clone();
@@ -50,7 +56,7 @@ function saveTabsToStorage(tabs){
         'title': x.title,
         'url': x.url
     }));
-    currentData.windowID = browser.windows.WINDOW_ID_CURRENT;
+    currentData.windowID = currentWindow.id;
     storedWins["window" + (Object.keys(storedWins).length + 1)] = currentData;
     storageData.storedWindows = storedWins;
 
@@ -71,7 +77,7 @@ $('#addCurrentWindow').on("click", function(){
         currentWindow: true
     }).then(function(tabs){
         saveTabsToStorage(tabs);
-        addTabList(tabs, browser.windows.WINDOW_ID_CURRENT);
+        addTabList(tabs, currentWindow.id);
     })
 });
 
@@ -88,6 +94,12 @@ $(document).on('click', '#openWindow', function(){
     })
 })
 
+$(document).on('click', '#deleteWindow', function(){
+    var savedWindowID = $(this).parents('.winList').attr('id');
+    $(this).parents('.winList').remove();
+    delete storageData.storedWindows[savedWindowID];
+    storage.set({'tabSaverData': storageData});
+})
 
 //storage.clear();
 init();
