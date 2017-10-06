@@ -3,6 +3,7 @@ var storageData, windowsOpen, currentWindow;
 
 function init(){
 
+    $('#addCurrentWindow').show();
     windows.getAll().then(function(windowInfoArray){
         windowsOpen = windowInfoArray.map(x => x.id);
 
@@ -73,11 +74,13 @@ function stringTruncate(str, limit=5){
 
 
 $('#addCurrentWindow').on("click", function(){
+    var self = this;
     browser.tabs.query({
         currentWindow: true
     }).then(function(tabs){
         saveTabsToStorage(tabs);
         addTabList(tabs, currentWindow.id);
+        $(self).hide();
     })
 });
 
@@ -99,6 +102,7 @@ $(document).on('click', '#deleteWindow', function(){
     $(this).parents('.winList').remove();
     delete storageData.storedWindows[savedWindowID];
     storage.set({'tabSaverData': storageData});
+    init();
 })
 
 //storage.clear();
