@@ -18,14 +18,14 @@ function init(){
 
         var storedWindows = storageData.storedWindows;
         for(var key in storedWindows){
-            addTabList(storedWindows[key].tabs, storedWindows[key].windowID);
+            addTabList(storedWindows[key].tabs, storedWindows[key].windowID, storedWindows[key].retracted);
             if(currentWindow.id === storedWindows[key].windowID)
                 $('#addCurrentWindow').hide();
         }
     });
 }
 
-function addTabList(tabs, windowID){
+function addTabList(tabs, windowID, retracted = false){
 
     var listTemplate = $('#template').clone();
     $(listTemplate).find('.header .heading').first().html('Window ' + ($('#mainList').children('.winList').length+1));
@@ -43,7 +43,10 @@ function addTabList(tabs, windowID){
     console.log(windowID);
     if(windowsOpen.includes(windowID))
         $(listTemplate).find('.openWindow').remove();
-
+    if(retracted){
+        $(listTemplate).find('.retractor').toggleClass('retracted');
+        $(listTemplate).find('.tabList').hide();
+    }
     $(tabList).children('.tabDetail').first().remove();
     $('#mainList').append(listTemplate);
 
@@ -58,6 +61,7 @@ function saveTabsToStorage(tabs){
         'url': x.url
     }));
     currentData.windowID = currentWindow.id;
+    currentData.retracted = false;
     storedWins["window" + (Object.keys(storedWins).length + 1)] = currentData;
     storageData.storedWindows = storedWins;
 
@@ -106,8 +110,11 @@ $(document).on('click', '.deleteWindow', function(){
 })
 
 $(document).on('click', '.winList .header .retractor', function(){
+    var windowID = $(this).parents('.winList').attr('id');
     $(this).parent('.header').next('.tabList').slideToggle(300);
     $(this).toggleClass('retracted');
+    storageData.storedWindows[windowID].retracted = !storageData.storedWindows[windowID].retracted;
+    storage.set({'tabSaverData': storageData});
 })
 //storage.clear();
 init();
