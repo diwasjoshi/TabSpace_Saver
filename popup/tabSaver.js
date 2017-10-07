@@ -28,7 +28,7 @@ function init(){
 function addTabList(tabs, windowID){
 
     var listTemplate = $('#template').clone();
-    $(listTemplate).find('.header #heading').first().html('Window ' + ($('#mainList').children('.winList').length+1));
+    $(listTemplate).find('.header .heading').first().html('Window ' + ($('#mainList').children('.winList').length+1));
     $(listTemplate).attr('id', 'window' + ($('#mainList').children('.winList').length+1));
 
     var tabList = $(listTemplate).children('.tabList').first();
@@ -42,7 +42,7 @@ function addTabList(tabs, windowID){
     console.log(windowsOpen);
     console.log(windowID);
     if(windowsOpen.includes(windowID))
-        $(listTemplate).find('#openWindow').remove();
+        $(listTemplate).find('.openWindow').remove();
 
     $(tabList).children('.tabDetail').first().remove();
     $('#mainList').append(listTemplate);
@@ -84,7 +84,7 @@ $('#addCurrentWindow').on("click", function(){
     })
 });
 
-$(document).on('click', '#openWindow', function(){
+$(document).on('click', '.openWindow', function(){
     $(this).hide();
     var tabUrls = [];
     $(this).parents('.winList').find('.tabDetail').each((index, el) => tabUrls.push($(el).attr('url')));
@@ -97,7 +97,7 @@ $(document).on('click', '#openWindow', function(){
     })
 })
 
-$(document).on('click', '#deleteWindow', function(){
+$(document).on('click', '.deleteWindow', function(){
     var savedWindowID = $(this).parents('.winList').attr('id');
     $(this).parents('.winList').remove();
     delete storageData.storedWindows[savedWindowID];
@@ -105,5 +105,9 @@ $(document).on('click', '#deleteWindow', function(){
     init();
 })
 
+$(document).on('click', '.winList .header .retractor', function(){
+    $(this).parent('.header').next('.tabList').slideToggle(300);
+    $(this).toggleClass('retracted');
+})
 //storage.clear();
 init();

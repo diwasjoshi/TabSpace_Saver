@@ -56,8 +56,8 @@ body {
     margin-right: 20px;
     padding-left: 8px;
 }
-.winList .header #openWindow,
-.winList .header #deleteWindow{
+.winList .header .openWindow,
+.winList .header .deleteWindow{
     font-size: 10px;
     color: #777;
     cursor: pointer;
@@ -74,6 +74,15 @@ body {
 }
 .winList .tabDetail:hover{
     background-color: #C9C9C9;
+}
+.winList .retractor{
+    cursor: pointer;
+}
+.winList .retractor:after{
+    content: '-';
+}
+.winList .retractor.retracted:after{
+    content: '+';
 }
 #template{
     display: none;
