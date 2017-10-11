@@ -1,12 +1,12 @@
 var storage = browser.storage.local, windows = browser.windows;
-var storageData, windowsOpen, currentWindow;
+var storageData, windowsOpen, currentWindow, windowTitles;
 
 function init(){
 
     $('#addCurrentWindow').show();
     windows.getAll().then(function(windowInfoArray){
         windowsOpen = windowInfoArray.map(x => x.id);
-
+        console.log(windowInfoArray);
     });
 
     windows.getCurrent().then(function(windowInfo){
@@ -39,8 +39,7 @@ function addTabList(tabs, windowID, retracted = false){
         $(tabDetail).attr('url', tabs[i].url);
         $(tabList).append(tabDetail);
     }
-    console.log(windowsOpen);
-    console.log(windowID);
+
     if(windowsOpen.includes(windowID))
         $(listTemplate).find('.openWindow').remove();
     if(retracted){
@@ -71,7 +70,7 @@ function saveTabsToStorage(tabs){
 
 function stringTruncate(str, limit=5){
    if (str.length > limit)
-      return str.substring(0,limit)+'...';
+      return str.substring(0,limit) + '...';
    else
       return str;
 };
@@ -92,12 +91,19 @@ $(document).on('click', '.openWindow', function(){
     $(this).hide();
     var tabUrls = [];
     $(this).parents('.winList').find('.tabDetail').each((index, el) => tabUrls.push($(el).attr('url')));
+    var windowListId = $(this).parents('.winList').attr('id');
     tabUrls = tabUrls.filter(x => x.includes('http'));
-
+console.log(windowListId);
+console.log(storageData);
+    if(storageData.unsyncWins === undefined)
+        storageData.unsyncWindows = [];
+    storageData.unsyncWindows.push("tabsaver_" + windowListId);
     browser.windows.create({
+        titlePreface : "tabsaver_" + windowListId,
         url : tabUrls
     }).then(function(windowInfo){
-        console.log('new window opened.');
+        storageData.storedWindows[windowListId].windowID = windowInfo.id;
+        storage.set({'tabSaverData': storageData});
     })
 })
 
@@ -116,5 +122,12 @@ $(document).on('click', '.winList .header .retractor', function(){
     storageData.storedWindows[windowID].retracted = !storageData.storedWindows[windowID].retracted;
     storage.set({'tabSaverData': storageData});
 })
+
 //storage.clear();
+
+browser.windows.onCreated.addListener((window) => {
+  console.log("New window: " + window.id);
+  console.log(storageData);
+});
+
 init();
